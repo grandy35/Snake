@@ -43,6 +43,7 @@ public:
 	static bool CanChangeVerticalDirection;
 	static bool CanChangeHorizontalDirection;
 
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -53,5 +54,5 @@ public:
 
 	void AddSnakeElement(int ElementsNum = 1);
 
-	void Move(float DeltaTime);
+	void Move();
 };
