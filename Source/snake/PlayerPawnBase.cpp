@@ -6,14 +6,10 @@
 #include "SnakeBase.h"
 #include "Components/InputComponent.h"
 
-
-bool ASnakeBase::CanChangeVerticalDirection;
-bool ASnakeBase::CanChangeHorizontalDirection;
-
 // Sets default values
 APlayerPawnBase::APlayerPawnBase()
 {
-	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+ 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	PawnCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("PawnCamera"));
@@ -32,6 +28,7 @@ void APlayerPawnBase::BeginPlay()
 void APlayerPawnBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
 }
 
 // Called to bind functionality to input
@@ -41,6 +38,7 @@ void APlayerPawnBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 	PlayerInputComponent->BindAxis("Vertical", this, &APlayerPawnBase::HandlePlayerVerticalInput);
 	PlayerInputComponent->BindAxis("Horizontal", this, &APlayerPawnBase::HandlePlayerHorizontalInput);
+
 }
 
 void APlayerPawnBase::CreateSnakeActor()
@@ -51,17 +49,11 @@ void APlayerPawnBase::CreateSnakeActor()
 void APlayerPawnBase::HandlePlayerVerticalInput(float value)
 {
 	if (IsValid(SnakeActor)) {
-		if (value > 0 && SnakeActor->LastMoveDirection != EMovementDirection::DOWN
-			&& ASnakeBase::CanChangeVerticalDirection) {
+		if (value > 0 && SnakeActor->LastMoveDirection!=EMovementDirection::DOWN) {
 			SnakeActor->LastMoveDirection = EMovementDirection::UP;
-			ASnakeBase::CanChangeVerticalDirection = false;
-			ASnakeBase::CanChangeHorizontalDirection = false;
 		}
-		else if (value < 0 && SnakeActor->LastMoveDirection != EMovementDirection::UP
-			&& ASnakeBase::CanChangeVerticalDirection) {
+		else if (value < 0 && SnakeActor->LastMoveDirection!=EMovementDirection::UP) {
 			SnakeActor->LastMoveDirection = EMovementDirection::DOWN;
-			ASnakeBase::CanChangeVerticalDirection = false;
-			ASnakeBase::CanChangeHorizontalDirection = false;
 		}
 	}
 }
@@ -69,17 +61,11 @@ void APlayerPawnBase::HandlePlayerVerticalInput(float value)
 void APlayerPawnBase::HandlePlayerHorizontalInput(float value)
 {
 	if (IsValid(SnakeActor)) {
-		if (value > 0 && SnakeActor->LastMoveDirection != EMovementDirection::RIGHT
-			&& ASnakeBase::CanChangeHorizontalDirection) {
+		if (value > 0 && SnakeActor->LastMoveDirection!=EMovementDirection::RIGHT) {
 			SnakeActor->LastMoveDirection = EMovementDirection::LEFT;
-			ASnakeBase::CanChangeHorizontalDirection = false;
-			ASnakeBase::CanChangeVerticalDirection = false;
 		}
-		else if (value < 0 && SnakeActor->LastMoveDirection != EMovementDirection::LEFT
-			&& ASnakeBase::CanChangeHorizontalDirection) {
+		else if (value < 0 && SnakeActor->LastMoveDirection!=EMovementDirection::LEFT) {
 			SnakeActor->LastMoveDirection = EMovementDirection::RIGHT;
-			ASnakeBase::CanChangeHorizontalDirection = false;
-			ASnakeBase::CanChangeVerticalDirection = false;
 		}
 	}
 }

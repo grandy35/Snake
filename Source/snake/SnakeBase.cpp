@@ -61,8 +61,6 @@ void ASnakeBase::Move(float DeltaTime)
 		MovementVector.Y += MovementSpeed;
 		break;
 	}
-	ASnakeBase::CanChangeHorizontalDirection = true;
-	ASnakeBase::CanChangeVerticalDirection = true;
 	//AddActorWorldOffset(MovementVector);
 
 	for (int i = SnakeElements.Num() - 1; i > 0; i--) {
