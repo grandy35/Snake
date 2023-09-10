@@ -39,6 +39,10 @@ public:
 
 	UPROPERTY()
 		EMovementDirection LastMoveDirection;
+	
+		static bool CanChangeVerticalDirection;
+		static bool CanChangeHorizontalDirection;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

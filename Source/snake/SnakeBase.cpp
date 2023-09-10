@@ -26,6 +26,7 @@ void ASnakeBase::BeginPlay()
 void ASnakeBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
 	Move(DeltaTime);
 }
 
@@ -69,6 +70,8 @@ void ASnakeBase::Move(float DeltaTime)
 		FVector PrevLocation = PrevElement->GetActorLocation();
 		CurentElement->SetActorLocation(PrevLocation);
 	}
+	ASnakeBase::CanChangeHorizontalDirection = true;
+	ASnakeBase::CanChangeVerticalDirection = true;
 	SnakeElements[0]->AddActorWorldOffset(MovementVector);
 }
 
