@@ -4,6 +4,8 @@
 #include "SnakeBase.h"
 #include "SnakeElementBase.h"
 #include <vector>
+#include "IInteractable.h"
+
 // Sets default values
 ASnakeBase::ASnakeBase()
 {
@@ -36,6 +38,7 @@ void ASnakeBase::AddSnakeElement(int ElementsNum)
 		FVector NewLocation(SnakeElements.Num() * ElementSize, 0, 0);
 		FTransform NewTrasform(NewLocation);
 		ASnakeElementBase* NewSnakeElem = GetWorld()->SpawnActor<ASnakeElementBase>(SnakeElementClass, NewTrasform);
+		NewSnakeElem->SnakeOwner = this;
 		int32 ElemIndex = SnakeElements.Add(NewSnakeElem);
 		if (ElemIndex == 0) {
 			NewSnakeElem->SetFirstElementType();
@@ -46,23 +49,24 @@ void ASnakeBase::AddSnakeElement(int ElementsNum)
 void ASnakeBase::Move(float DeltaTime)
 {
 	FVector MovementVector(0,0,0);
-	MovementSpeed = ElementSize;
-	
+	 MovementSpeed = ElementSize;
 	switch (LastMoveDirection) {
 	case EMovementDirection::UP:
-		MovementVector.X -= MovementSpeed;
+		MovementVector.X -= MovementSpeed;;
 		break;
 	case EMovementDirection::DOWN:
-		MovementVector.X += MovementSpeed;
+		MovementVector.X += MovementSpeed;;
 		break;
 	case EMovementDirection::LEFT:
-		MovementVector.Y -= MovementSpeed;
+		MovementVector.Y -= MovementSpeed;;
 		break;
 	case EMovementDirection::RIGHT:
-		MovementVector.Y += MovementSpeed;
+		MovementVector.Y += MovementSpeed;;
 		break;
 	}
+
 	//AddActorWorldOffset(MovementVector);
+	SnakeElements[0]->ToggleCollision();
 
 	for (int i = SnakeElements.Num() - 1; i > 0; i--) {
 		auto CurentElement = SnakeElements[i];
@@ -73,5 +77,18 @@ void ASnakeBase::Move(float DeltaTime)
 	ASnakeBase::CanChangeHorizontalDirection = true;
 	ASnakeBase::CanChangeVerticalDirection = true;
 	SnakeElements[0]->AddActorWorldOffset(MovementVector);
+	SnakeElements[0]->ToggleCollision();
+
 }
 
+void ASnakeBase::SnakeElementOverlap(ASnakeElementBase* OverlappedElement, AActor* Other){
+	if (IsValid(OverlappedElement)) {
+		int32 ElemIndex;
+		SnakeElements.Find(OverlappedElement, ElemIndex);
+		bool bIsFirst = ElemIndex == 0;
+		IInteractable* InteractableInterface = Cast<IInteractable>(Other);
+		if (InteractableInterface) {
+			InteractableInterface->Interact(this, bIsFirst);
+		}
+	}
+}
