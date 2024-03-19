@@ -10,8 +10,7 @@ bool ASnakeBase::CanChangeVerticalDirection;
 bool ASnakeBase::CanChangeHorizontalDirection;
 
 // Sets default values
-APlayerPawnBase::APlayerPawnBase()
-{
+APlayerPawnBase::APlayerPawnBase() {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -20,23 +19,20 @@ APlayerPawnBase::APlayerPawnBase()
 }
 
 // Called when the game starts or when spawned
-void APlayerPawnBase::BeginPlay()
-{
+void APlayerPawnBase::BeginPlay() {
 	Super::BeginPlay();
 	SetActorRotation(FRotator(-90, 180, 0));
 	CreateSnakeActor();
 }
 
 // Called every frame
-void APlayerPawnBase::Tick(float DeltaTime)
-{
+void APlayerPawnBase::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
 
 }
 
 // Called to bind functionality to input
-void APlayerPawnBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
+void APlayerPawnBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	PlayerInputComponent->BindAxis("Vertical", this, &APlayerPawnBase::HandlePlayerVerticalInput);
@@ -44,13 +40,11 @@ void APlayerPawnBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 }
 
-void APlayerPawnBase::CreateSnakeActor()
-{
+void APlayerPawnBase::CreateSnakeActor() {
 	SnakeActor = GetWorld()->SpawnActor<ASnakeBase>(SnakeActorClass, FTransform());
 }
 
-void APlayerPawnBase::HandlePlayerVerticalInput(float value)
-{
+void APlayerPawnBase::HandlePlayerVerticalInput(float value) {
 	if (IsValid(SnakeActor)) {
 		if (value > 0 && SnakeActor->LastMoveDirection != EMovementDirection::DOWN
 			&& ASnakeBase::CanChangeVerticalDirection) {
@@ -67,8 +61,7 @@ void APlayerPawnBase::HandlePlayerVerticalInput(float value)
 	}
 }
 
-void APlayerPawnBase::HandlePlayerHorizontalInput(float value)
-{
+void APlayerPawnBase::HandlePlayerHorizontalInput(float value) {
 	if (IsValid(SnakeActor)) {
 		if (value > 0 && SnakeActor->LastMoveDirection != EMovementDirection::RIGHT
 			&& ASnakeBase::CanChangeHorizontalDirection) {
