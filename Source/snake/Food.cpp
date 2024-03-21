@@ -31,6 +31,13 @@ void AFood::Interact(AActor* Interactor, bool bIsHead){
 		auto Snake = Cast<ASnakeBase>(Interactor);
 		if (IsValid(Snake)) {
 			Snake->AddSnakeElement();
+			Snake->Move();
+			int x = (rand() % 35) * 20;
+			int y = (rand() % 35) * 20;
+			FRotator FoodRotation(0, 0, 0);
+			FVector FoodLocation(x, y, 0);
+			GetWorld()->SpawnActor<AFood>(this->GetClass(), FoodLocation, FoodRotation);
+			Destroy();
 		}
 	}
 }
