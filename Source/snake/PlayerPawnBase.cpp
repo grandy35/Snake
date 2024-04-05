@@ -37,19 +37,15 @@ void APlayerPawnBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 	PlayerInputComponent->BindAxis("Vertical", this, &APlayerPawnBase::HandlePlayerVerticalInput);
 	PlayerInputComponent->BindAxis("Horizontal", this, &APlayerPawnBase::HandlePlayerHorizontalInput);
-
 }
 
 void APlayerPawnBase::CreateSnakeActor() {
 	SnakeActor = GetWorld()->SpawnActor<ASnakeBase>(SnakeActorClass, FTransform());
-	
 }
 
 void APlayerPawnBase::HandlePlayerVerticalInput(float value) {
 	if (IsValid(SnakeActor)) {
 		FVector test2 = SnakeActor->GetActorLocation();
-		//UE_LOG(LogTemp, Warning, TEXT("Y is: %s"), test2.ToString());
-		//UE_LOG(LogTemp, Warning, TEXT("X is: %s"), test2.ToString());
 		if (value > 0 && SnakeActor->LastMoveDirection != EMovementDirection::DOWN
 			&& ASnakeBase::CanChangeVerticalDirection) {
 			SnakeActor->LastMoveDirection = EMovementDirection::UP;

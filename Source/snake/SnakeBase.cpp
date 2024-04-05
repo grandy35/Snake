@@ -35,25 +35,14 @@ void ASnakeBase::Tick(float DeltaTime)
 void ASnakeBase::AddSnakeElement(int ElementsNum)
 {
 	for (int i = 0; i < ElementsNum; i++) {
-		FVector NewLocation;
-		if (ElementsNum == 1) {
-			NewLocation.X = SnakeElements.Num() * ElementSize + 160;
-			NewLocation.Y = 0;
-			NewLocation.Z = 0;
-		}
-		else {
-			NewLocation.X = SnakeElements.Num() * ElementSize;
-			NewLocation.Y = 0;
-			NewLocation.Z = 0;
-		}
+		FVector NewLocation(SnakeElements.Num() * ElementSize, 0, 0);
+
 		FTransform NewTrasform(NewLocation);
 		ASnakeElementBase* NewSnakeElem = GetWorld()->SpawnActor<ASnakeElementBase>(SnakeElementClass, NewTrasform);
 		NewSnakeElem->SnakeOwner = this;
 		int32 ElemIndex = SnakeElements.Add(NewSnakeElem);
 
 		FVector test = SnakeElements[i]->GetTargetLocation();
-		UE_LOG(LogTemp, Warning, TEXT("The integer value is: %d"), test.Y);
-		UE_LOG(LogTemp, Warning, TEXT("The integer value is: %d"), test.X);
 		if (ElemIndex == 0) {
 			NewSnakeElem->SetFirstElementType();
 		}
@@ -83,7 +72,6 @@ void ASnakeBase::Move()
 
 	//AddActorWorldOffset(MovementVector);
 	SnakeElements[0]->ToggleCollision();
-
 	for (int i = SnakeElements.Num() - 1; i > 0; i--) {
 		auto CurentElement = SnakeElements[i];
 		auto PrevElement = SnakeElements[i - 1];
@@ -92,13 +80,10 @@ void ASnakeBase::Move()
 	}
 	ASnakeBase::CanChangeHorizontalDirection = true;
 	ASnakeBase::CanChangeVerticalDirection = true;
-	//UE_LOG(LogTemp, Warning, TEXT("X is: %f"), SnakeElements[0]->GetWorld().Y);
-	//UE_LOG(LogTemp, Warning, TEXT("X is: %f"), SnakeElements[0]->GetActorLocation().X);
+
 	SnakeElements[0]->AddActorWorldOffset(MovementVector);
 	SnakeElements[0]->ToggleCollision();
 
-	//UE_LOG(LogTemp, Warning, TEXT("Y is: %s"), SnakeElements[0]->GetActorLocation().Y);
-	//UE_LOG(LogTemp, Warning, TEXT("X is: %s"), SnakeElements[0]->GetActorLocation().X);
 }
 
 void ASnakeBase::SnakeElementOverlap(ASnakeElementBase* OverlappedElement, AActor* Other) {
@@ -112,3 +97,19 @@ void ASnakeBase::SnakeElementOverlap(ASnakeElementBase* OverlappedElement, AActo
 		}
 	}
 }
+
+std::vector<FVector> ASnakeBase::GetCoordinate() {
+	std::vector<FVector> coords;
+	for (int i = 0; i < SnakeElements.Num() - 1; i++) {
+		XYZ = SnakeElements[i]->GetActorLocation();
+		coords.push_back(XYZ);
+	}
+
+	return coords;
+}
+
+FVector ASnakeBase::GetZeroElementCoordinate() {
+	return GetCoordinate()[0];
+}
+
+

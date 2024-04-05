@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "vector"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "SnakeBase.generated.h"
@@ -20,8 +21,8 @@ UCLASS()
 class SNAKE_API ASnakeBase : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	ASnakeBase();
 
@@ -39,15 +40,15 @@ public:
 
 	UPROPERTY()
 		EMovementDirection LastMoveDirection;
-	
-		static bool CanChangeVerticalDirection;
-		static bool CanChangeHorizontalDirection;
+
+	static bool CanChangeVerticalDirection;
+	static bool CanChangeHorizontalDirection;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -56,4 +57,9 @@ public:
 	void Move();
 
 	void SnakeElementOverlap(ASnakeElementBase* OverlappedElement, AActor* Other);
+
+	std::vector<FVector> GetCoordinate();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FVector GetZeroElementCoordinate();
 };
