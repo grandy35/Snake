@@ -100,6 +100,8 @@ void ASnakeBase::SnakeElementOverlap(ASnakeElementBase* OverlappedElement, AActo
 
 std::vector<FVector> ASnakeBase::GetCoordinate() {
 	std::vector<FVector> coords;
+	FVector XYZ;
+
 	for (int i = 0; i < SnakeElements.Num() - 1; i++) {
 		XYZ = SnakeElements[i]->GetActorLocation();
 		coords.push_back(XYZ);
