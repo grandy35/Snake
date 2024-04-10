@@ -3,13 +3,14 @@
 
 #include "Food.h"
 #include "SnakeBase.h"
+#include "Bonus.h"
+#include "Constants.h"
 #include "cstdlib"
 #include "cmath"
 #include "ctime"
 #include <string>
 #include <vector>
 
-const int threshold_food_eating = 6;
 int AFood::food_count = 0;
 
 // Sets default values
@@ -25,17 +26,12 @@ AFood::AFood()
 void AFood::BeginPlay()
 {
 	Super::BeginPlay();
-
 }
 
 // Called every frame
 void AFood::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-}
-
-void test1() {
-
 }
 
 bool HasCollision(std::vector<FVector> coords, float x, float y) {
@@ -98,28 +94,23 @@ void AFood::Interact(AActor* Interactor, bool bIsHead) {
 					hasCollision = false;
 				}
 			}
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("X: %f, Y: %f"), x, y));
+
 			FRotator FoodRotation(0, 0, 0);
 			FVector FoodLocation(x, y, 0);
-			if (food_count == threshold_food_eating) {
-				auto SpawnedActor = GetWorld()->SpawnActor<AFood>(this->GetClass(), FoodLocation, FoodRotation);
-				FVector new_scale = SpawnedActor->GetActorScale3D();
-				new_scale *= 2.f;
-				SpawnedActor->SetActorScale3D(new_scale);
+			FRotator BonusRotation(0, 0, 0);
+			FVector BonusLocation(x, y, 0);
 
-				AFood::SetSixFood();
+			if (food_count == threshold_food_eating) {
+				auto SpawnedFood = GetWorld()->SpawnActor<AFood>(this->GetClass(), FoodLocation, FoodRotation);
+				auto SpawnedBonus = GetWorld()->SpawnActor<ABonus>(this->GetClass(), BonusLocation, BonusRotation);
 
 				food_count = 0;
 			}
 			else {
-				auto SpawnedActor = GetWorld()->SpawnActor<AFood>(this->GetClass(), FoodLocation, FoodRotation);
+				auto SpawnedFood = GetWorld()->SpawnActor<AFood>(this->GetClass(), FoodLocation, FoodRotation);
 				food_count++;
 			}
 			Destroy();
 		}
 	}
-}
-
-void AFood::SetSixFood_Implementation()
-{
 }
