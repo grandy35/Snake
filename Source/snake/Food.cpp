@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-int AFood::food_count = 0;
+int AFood::InnerScore = 0;
 
 // Sets default values
 AFood::AFood()
@@ -48,7 +48,7 @@ bool HasCollision(std::vector<FVector> coords, float x, float y) {
 }
 
 int get_random_number(float size) {
-	int field_length = 1066;
+	int field_length = 984;
 	int half_field_length = field_length / 2;
 
 	std::vector<int> multiples;
@@ -84,32 +84,47 @@ void AFood::Interact(AActor* Interactor, bool bIsHead) {
 
 			auto coords = Snake->GetCoordinate();
 			bool hasCollision = true;
-			float x = 0;
-			float y = 0;
-			while (hasCollision) {
-				x = get_random_number(Snake->ElementSize);
-				y = get_random_number(Snake->ElementSize);
 
-				if (!HasCollision(coords, x, y)) {
+			float XFood = 0;
+			float YFood = 0;
+			float XBonus = 0;
+			float YBonus = 0;
+
+			while (hasCollision) {
+				XFood = get_random_number(Snake->ElementSize);
+				YFood = get_random_number(Snake->ElementSize);
+
+				if (!HasCollision(coords, XFood, YFood)) {
+					hasCollision = false;
+				}
+				XBonus = get_random_number(Snake->ElementSize);
+				YBonus = get_random_number(Snake->ElementSize);
+
+				if (!HasCollision(coords, XBonus, YBonus)) {
+					hasCollision = false;
+				}
+				if (XFood != XBonus && YFood != YBonus) {
 					hasCollision = false;
 				}
 			}
 
+			InnerScore += 4;
+			AFood::Score = InnerScore;
+			UpdateScore(InnerScore);
+
 			FRotator FoodRotation(0, 0, 0);
-			FVector FoodLocation(x, y, 0);
+			FVector FoodLocation(XFood, YFood, 0);
 			FRotator BonusRotation(0, 0, 0);
-			FVector BonusLocation(x, y, 0);
+			FVector BonusLocation(XBonus, YBonus, 0);
 
-			if (food_count == threshold_food_eating) {
-				auto SpawnedFood = GetWorld()->SpawnActor<AFood>(this->GetClass(), FoodLocation, FoodRotation);
-				auto SpawnedBonus = GetWorld()->SpawnActor<ABonus>(this->GetClass(), BonusLocation, BonusRotation);
+			auto SpawnedFood = GetWorld()->SpawnActor<AFood>(this->GetClass(), FoodLocation, FoodRotation);
 
-				food_count = 0;
+			int food_count = Snake->SnakeElements.Num();
+
+			if ((food_count % threshold_food_eating) == 0) {
+				auto SpawnedBonus = GetWorld()->SpawnActor<ABonus>(Bonus, BonusLocation, BonusRotation);
 			}
-			else {
-				auto SpawnedFood = GetWorld()->SpawnActor<AFood>(this->GetClass(), FoodLocation, FoodRotation);
-				food_count++;
-			}
+			
 			Destroy();
 		}
 	}

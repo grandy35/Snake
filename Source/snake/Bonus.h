@@ -11,8 +11,9 @@ UCLASS()
 class SNAKE_API ABonus : public AActor, public IInteractable
 {
 	GENERATED_BODY()
-	
-public:	
+
+
+public:
 	// Sets default values for this actor's properties
 	ABonus();
 
@@ -20,9 +21,16 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly)
+		UStaticMeshComponent* MeshComponent;
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Score Update")
+		void UpdateScore(int NewScore);
+
 	virtual void Interact(AActor* Interactor, bool bIsHead) override;
+
 };

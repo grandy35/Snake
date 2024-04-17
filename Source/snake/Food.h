@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "IInteractable.h"
+#include "Bonus.h"
 #include "Food.generated.h"
 
 UCLASS()
@@ -26,10 +27,19 @@ public:
 
 	virtual void Interact(AActor* Interactor, bool bIsHead) override;
 
-	static int food_count;
+	UPROPERTY(EditDefaultsOnly)
+		TSubclassOf<ABonus> Bonus;
 
 	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly)
 		UStaticMeshComponent* MeshComponent;
+
+	UPROPERTY(BlueprintReadWrite)
+		int Score;
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Score Update")
+		void UpdateScore(int NewScore);
+
+	static int InnerScore;
 };
 
 bool IsItAvailableCoordinates(FVector coord, float x, float y);
