@@ -70,7 +70,6 @@ void ASnakeBase::Move()
 		break;
 	}
 
-	//AddActorWorldOffset(MovementVector);
 	SnakeElements[0]->ToggleCollision();
 	for (int i = SnakeElements.Num() - 1; i > 0; i--) {
 		auto CurentElement = SnakeElements[i];
