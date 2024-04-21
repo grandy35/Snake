@@ -9,7 +9,7 @@
 // Sets default values
 ASnakeBase::ASnakeBase()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	ElementSize = 100.f;
 	MovementSpeed = 10.f;
@@ -29,27 +29,32 @@ void ASnakeBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	Move(DeltaTime);
+	Move();
 }
 
 void ASnakeBase::AddSnakeElement(int ElementsNum)
 {
 	for (int i = 0; i < ElementsNum; i++) {
 		FVector NewLocation(SnakeElements.Num() * ElementSize, 0, 0);
+
 		FTransform NewTrasform(NewLocation);
 		ASnakeElementBase* NewSnakeElem = GetWorld()->SpawnActor<ASnakeElementBase>(SnakeElementClass, NewTrasform);
 		NewSnakeElem->SnakeOwner = this;
 		int32 ElemIndex = SnakeElements.Add(NewSnakeElem);
+
+		FVector test = SnakeElements[i]->GetTargetLocation();
 		if (ElemIndex == 0) {
 			NewSnakeElem->SetFirstElementType();
 		}
 	}
+
+	SnakeElements[SnakeElements.Num() - 1]->SetActorLocation(SnakeElements[SnakeElements.Num() - 2]->GetActorLocation());
 }
 
-void ASnakeBase::Move(float DeltaTime)
+void ASnakeBase::Move()
 {
-	FVector MovementVector(0,0,0);
-	 MovementSpeed = ElementSize;
+	FVector MovementVector(0, 0, 0);
+	MovementSpeed = ElementSize;
 	switch (LastMoveDirection) {
 	case EMovementDirection::UP:
 		MovementVector.X -= MovementSpeed;;
@@ -65,9 +70,7 @@ void ASnakeBase::Move(float DeltaTime)
 		break;
 	}
 
-	//AddActorWorldOffset(MovementVector);
 	SnakeElements[0]->ToggleCollision();
-
 	for (int i = SnakeElements.Num() - 1; i > 0; i--) {
 		auto CurentElement = SnakeElements[i];
 		auto PrevElement = SnakeElements[i - 1];
@@ -76,12 +79,13 @@ void ASnakeBase::Move(float DeltaTime)
 	}
 	ASnakeBase::CanChangeHorizontalDirection = true;
 	ASnakeBase::CanChangeVerticalDirection = true;
+
 	SnakeElements[0]->AddActorWorldOffset(MovementVector);
 	SnakeElements[0]->ToggleCollision();
 
 }
 
-void ASnakeBase::SnakeElementOverlap(ASnakeElementBase* OverlappedElement, AActor* Other){
+void ASnakeBase::SnakeElementOverlap(ASnakeElementBase* OverlappedElement, AActor* Other) {
 	if (IsValid(OverlappedElement)) {
 		int32 ElemIndex;
 		SnakeElements.Find(OverlappedElement, ElemIndex);
@@ -92,3 +96,21 @@ void ASnakeBase::SnakeElementOverlap(ASnakeElementBase* OverlappedElement, AActo
 		}
 	}
 }
+
+std::vector<FVector> ASnakeBase::GetCoordinate() {
+	std::vector<FVector> coords;
+	FVector XYZ;
+
+	for (int i = 0; i < SnakeElements.Num() - 1; i++) {
+		XYZ = SnakeElements[i]->GetActorLocation();
+		coords.push_back(XYZ);
+	}
+
+	return coords;
+}
+
+FVector ASnakeBase::GetZeroElementCoordinate() {
+	return GetCoordinate()[0];
+}
+
+

@@ -7,11 +7,14 @@
 #include "snakeGameModeBase.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class SNAKE_API AsnakeGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
+
+public:
+	virtual void BeginPlay() override;
 };

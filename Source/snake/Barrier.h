@@ -2,39 +2,27 @@
 
 #pragma once
 
+#include "IInteractable.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "IInteractable.h"
-#include "Bonus.h"
-#include "Food.generated.h"
+#include "Barrier.generated.h"
 
 UCLASS()
-class SNAKE_API AFood : public AActor, public IInteractable
+class SNAKE_API ABarrier : public AActor, public IInteractable
 {
 	GENERATED_BODY()
 
-
-public:
+public:	
 	// Sets default values for this actor's properties
-	AFood();
+	ABarrier();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:
+public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void Interact(AActor* Interactor, bool bIsHead) override;
-
-	UPROPERTY(EditDefaultsOnly)
-		TSubclassOf<ABonus> Bonus;
-
-	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly)
-		UStaticMeshComponent* MeshComponent;
 };
-
-bool IsItAvailableCoordinates(FVector coord, float x, float y);
-
-int get_random_number(float size);
