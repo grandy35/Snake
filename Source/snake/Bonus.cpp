@@ -6,6 +6,8 @@
 #include "Food.h"
 #include "Constants.h"
 #include "EngineUtils.h"
+#include "Kismet/GameplayStatics.h"
+#include "AMyGameState.h"
 
 // Sets default values
 ABonus::ABonus()
@@ -35,8 +37,15 @@ void ABonus::Interact(AActor* Interactor, bool bIsHead) {
 		auto Snake = Cast<ASnakeBase>(Interactor);
 
 		if (IsValid(Snake)) {
-			AFood::InnerScore += 8;
-			UpdateScore(AFood::InnerScore);
+			Snake->AddSnakeElement();
+			Snake->AddSnakeElement();
+
+			AAMyGameState* CurrentGameState = GetWorld()->GetGameState<AAMyGameState>();
+			if (CurrentGameState)
+			{
+				CurrentGameState->Score += 8;
+				CurrentGameState->UpdateScore(CurrentGameState->Score);
+			}
 
 			Destroy();
 		}

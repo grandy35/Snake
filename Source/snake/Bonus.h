@@ -28,9 +28,5 @@ public:
 	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly)
 		UStaticMeshComponent* MeshComponent;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "Score Update")
-		void UpdateScore(int NewScore);
-
 	virtual void Interact(AActor* Interactor, bool bIsHead) override;
-
 };

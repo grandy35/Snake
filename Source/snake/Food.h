@@ -13,6 +13,7 @@ class SNAKE_API AFood : public AActor, public IInteractable
 {
 	GENERATED_BODY()
 
+
 public:
 	// Sets default values for this actor's properties
 	AFood();
@@ -32,14 +33,6 @@ public:
 
 	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly)
 		UStaticMeshComponent* MeshComponent;
-
-	UPROPERTY(BlueprintReadWrite)
-		int Score;
-
-	UFUNCTION(BlueprintImplementableEvent, Category = "Score Update")
-		void UpdateScore(int NewScore);
-
-	static int InnerScore;
 };
 
 bool IsItAvailableCoordinates(FVector coord, float x, float y);

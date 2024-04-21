@@ -48,7 +48,7 @@ void ASnakeBase::AddSnakeElement(int ElementsNum)
 		}
 	}
 
-	//SnakeElements[SnakeElements.Num() - 1]->SetActorLocation(SnakeElements[SnakeElements.Num() - 2]->GetActorLocation());
+	SnakeElements[SnakeElements.Num() - 1]->SetActorLocation(SnakeElements[SnakeElements.Num() - 2]->GetActorLocation());
 }
 
 void ASnakeBase::Move()

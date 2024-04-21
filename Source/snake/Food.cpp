@@ -10,8 +10,7 @@
 #include "ctime"
 #include <string>
 #include <vector>
-
-int AFood::InnerScore = 0;
+#include "AMyGameState.h"
 
 // Sets default values
 AFood::AFood()
@@ -80,7 +79,6 @@ void AFood::Interact(AActor* Interactor, bool bIsHead) {
 
 		if (IsValid(Snake)) {
 			Snake->AddSnakeElement();
-			Snake->Move();
 
 			auto coords = Snake->GetCoordinate();
 			bool hasCollision = true;
@@ -108,9 +106,14 @@ void AFood::Interact(AActor* Interactor, bool bIsHead) {
 				}
 			}
 
-			InnerScore += 4;
-			AFood::Score = InnerScore;
-			UpdateScore(InnerScore);
+
+			AAMyGameState* CurrentGameState = GetWorld()->GetGameState<AAMyGameState>();
+			if (CurrentGameState)
+			{
+				CurrentGameState->Score += 4;
+				UE_LOG(LogTemp, Warning, TEXT("Updating score to %d"), CurrentGameState->Score);
+				CurrentGameState->UpdateScore(CurrentGameState->Score);
+			}
 
 			FRotator FoodRotation(0, 0, 0);
 			FVector FoodLocation(XFood, YFood, 0);
@@ -124,7 +127,7 @@ void AFood::Interact(AActor* Interactor, bool bIsHead) {
 			if ((food_count % threshold_food_eating) == 0) {
 				auto SpawnedBonus = GetWorld()->SpawnActor<ABonus>(Bonus, BonusLocation, BonusRotation);
 			}
-			
+
 			Destroy();
 		}
 	}
