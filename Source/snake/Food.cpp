@@ -12,12 +12,17 @@
 #include <vector>
 #include "AMyGameState.h"
 
+const int Constants::Threshold_Food_Eating = 6;
+
+const float Constants::RecoveryLifeFood = 0.1f;
+
 // Sets default values
 AFood::AFood()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	srand(time(0));
+
 
 }
 
@@ -31,6 +36,7 @@ void AFood::BeginPlay()
 void AFood::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
 }
 
 bool HasCollision(std::vector<FVector> coords, float x, float y) {
@@ -88,6 +94,13 @@ void AFood::Interact(AActor* Interactor, bool bIsHead) {
 			float XBonus = 0;
 			float YBonus = 0;
 
+			AAMyGameState* CurrentGameState = GetWorld()->GetGameState<AAMyGameState>();
+			if (CurrentGameState) {
+				CurrentGameState->RecoveryLifeTime(Constants::RecoveryLifeFood);
+				CurrentGameState->Score += 4;
+				CurrentGameState->UpdateScore(CurrentGameState->Score);
+			}
+
 			while (hasCollision) {
 				XFood = get_random_number(Snake->ElementSize);
 				YFood = get_random_number(Snake->ElementSize);
@@ -106,15 +119,6 @@ void AFood::Interact(AActor* Interactor, bool bIsHead) {
 				}
 			}
 
-
-			AAMyGameState* CurrentGameState = GetWorld()->GetGameState<AAMyGameState>();
-			if (CurrentGameState)
-			{
-				CurrentGameState->Score += 4;
-				UE_LOG(LogTemp, Warning, TEXT("Updating score to %d"), CurrentGameState->Score);
-				CurrentGameState->UpdateScore(CurrentGameState->Score);
-			}
-
 			FRotator FoodRotation(0, 0, 0);
 			FVector FoodLocation(XFood, YFood, 0);
 			FRotator BonusRotation(0, 0, 0);
@@ -124,7 +128,7 @@ void AFood::Interact(AActor* Interactor, bool bIsHead) {
 
 			int food_count = Snake->SnakeElements.Num();
 
-			if ((food_count % threshold_food_eating) == 0) {
+			if ((food_count % Constants::Threshold_Food_Eating) == 0) {
 				auto SpawnedBonus = GetWorld()->SpawnActor<ABonus>(Bonus, BonusLocation, BonusRotation);
 			}
 

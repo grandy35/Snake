@@ -17,4 +17,5 @@ class SNAKE_API AsnakeGameModeBase : public AGameModeBase
 
 public:
 	virtual void BeginPlay() override;
+
 };

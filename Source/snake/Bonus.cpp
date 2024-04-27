@@ -9,6 +9,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "AMyGameState.h"
 
+const float Constants::RecoveryLifeBonus = 0.15f;
+
 // Sets default values
 ABonus::ABonus()
 {
@@ -43,6 +45,7 @@ void ABonus::Interact(AActor* Interactor, bool bIsHead) {
 			AAMyGameState* CurrentGameState = GetWorld()->GetGameState<AAMyGameState>();
 			if (CurrentGameState)
 			{
+				CurrentGameState->RecoveryLifeTime(Constants::RecoveryLifeBonus);
 				CurrentGameState->Score += 8;
 				CurrentGameState->UpdateScore(CurrentGameState->Score);
 			}

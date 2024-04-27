@@ -1,7 +1,11 @@
 #pragma once
 
-extern const int threshold_food_eating;
-
 class Constants {
+public:
+	static const int Threshold_Food_Eating;
+
+	static const float RecoveryLifeFood;
+
+	static const float RecoveryLifeBonus;
 };
 

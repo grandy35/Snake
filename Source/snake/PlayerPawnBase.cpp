@@ -5,6 +5,7 @@
 #include "Engine/Classes/Camera/CameraComponent.h"
 #include "SnakeBase.h"
 #include "Components/InputComponent.h"
+#include <snake/AMyGameState.h>
 
 bool ASnakeBase::CanChangeVerticalDirection;
 bool ASnakeBase::CanChangeHorizontalDirection;
@@ -41,6 +42,10 @@ void APlayerPawnBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 void APlayerPawnBase::CreateSnakeActor() {
 	SnakeActor = GetWorld()->SpawnActor<ASnakeBase>(SnakeActorClass, FTransform());
+	AAMyGameState* GameState = GetWorld()->GetGameState<AAMyGameState>();
+	if (GameState) {
+		GameState->MySnake = SnakeActor;
+	}
 }
 
 void APlayerPawnBase::HandlePlayerVerticalInput(float value) {

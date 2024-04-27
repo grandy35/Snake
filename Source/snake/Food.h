@@ -33,6 +33,7 @@ public:
 
 	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly)
 		UStaticMeshComponent* MeshComponent;
+
 };
 
 bool IsItAvailableCoordinates(FVector coord, float x, float y);
