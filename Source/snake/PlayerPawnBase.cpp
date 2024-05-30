@@ -22,14 +22,14 @@ APlayerPawnBase::APlayerPawnBase() {
 // Called when the game starts or when spawned
 void APlayerPawnBase::BeginPlay() {
 	Super::BeginPlay();
-	SetActorRotation(FRotator(-90, 180, 0));
+
+	SetActorRotation(FRotator(-90, 90, 0));
 	CreateSnakeActor();
 }
 
 // Called every frame
 void APlayerPawnBase::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
@@ -50,7 +50,6 @@ void APlayerPawnBase::CreateSnakeActor() {
 
 void APlayerPawnBase::HandlePlayerVerticalInput(float value) {
 	if (IsValid(SnakeActor)) {
-		FVector test2 = SnakeActor->GetActorLocation();
 		if (value > 0 && SnakeActor->LastMoveDirection != EMovementDirection::DOWN
 			&& ASnakeBase::CanChangeVerticalDirection) {
 			SnakeActor->LastMoveDirection = EMovementDirection::UP;

@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "IInteractable.h"
+#include "SnakeBase.h"
+#include "Buff.h"
 #include "Bonus.generated.h"
 
 UCLASS()
@@ -29,4 +31,10 @@ public:
 		UStaticMeshComponent* MeshComponent;
 
 	virtual void Interact(AActor* Interactor, bool bIsHead) override;
+
+	UFUNCTION()
+		void ApplyBuff(ASnakeBase* Snake, BuffType Buff, float TimeDuration);
+
+	UFUNCTION()
+		void SelfDestroy(float DestroyDelay);
 };
