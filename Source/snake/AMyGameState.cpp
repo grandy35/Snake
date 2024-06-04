@@ -51,6 +51,7 @@ void AAMyGameState::DecreaseLifeTime() {
 	CurrentLifeTime -= DecreaseLife;
 	if (CurrentLifeTime <= 0) {
 		CurrentLifeTime = 0;
+		AAMyGameState::LoseScreen();
 	}
 }
 
