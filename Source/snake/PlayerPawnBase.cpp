@@ -5,6 +5,7 @@
 #include "Engine/Classes/Camera/CameraComponent.h"
 #include "SnakeBase.h"
 #include "Components/InputComponent.h"
+#include <snake/AMyGameState.h>
 
 bool ASnakeBase::CanChangeVerticalDirection;
 bool ASnakeBase::CanChangeHorizontalDirection;
@@ -21,14 +22,14 @@ APlayerPawnBase::APlayerPawnBase() {
 // Called when the game starts or when spawned
 void APlayerPawnBase::BeginPlay() {
 	Super::BeginPlay();
-	SetActorRotation(FRotator(-90, 180, 0));
+
+	SetActorRotation(FRotator(-90, 90, 0));
 	CreateSnakeActor();
 }
 
 // Called every frame
 void APlayerPawnBase::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
@@ -41,11 +42,14 @@ void APlayerPawnBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 void APlayerPawnBase::CreateSnakeActor() {
 	SnakeActor = GetWorld()->SpawnActor<ASnakeBase>(SnakeActorClass, FTransform());
+	AAMyGameState* GameState = GetWorld()->GetGameState<AAMyGameState>();
+	if (GameState) {
+		GameState->MySnake = SnakeActor;
+	}
 }
 
 void APlayerPawnBase::HandlePlayerVerticalInput(float value) {
 	if (IsValid(SnakeActor)) {
-		FVector test2 = SnakeActor->GetActorLocation();
 		if (value > 0 && SnakeActor->LastMoveDirection != EMovementDirection::DOWN
 			&& ASnakeBase::CanChangeVerticalDirection) {
 			SnakeActor->LastMoveDirection = EMovementDirection::UP;

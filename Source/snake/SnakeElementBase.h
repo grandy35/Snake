@@ -21,8 +21,10 @@ public:
 
 	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly)
 		UStaticMeshComponent* MeshComponent;
+
 	UPROPERTY()
 		ASnakeBase* SnakeOwner;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -44,6 +46,7 @@ public:
 				int32 OtheBodyIndex,
 				bool bFromSweep,
 				const FHitResult& SweepResult);
+
 		UFUNCTION()
 			void ToggleCollision();
 	};

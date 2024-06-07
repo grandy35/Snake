@@ -32,7 +32,7 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 		float ElementSize;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		float MovementSpeed;
 
 	UPROPERTY()
@@ -62,4 +62,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		FVector GetZeroElementCoordinate();
+
+	void UpdateMovementSpeed(float MovementSpeedSnake);
 };

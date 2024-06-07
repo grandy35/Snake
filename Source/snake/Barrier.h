@@ -3,16 +3,16 @@
 #pragma once
 
 #include "IInteractable.h"
+#include "SnakeBase.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Barrier.generated.h"
 
 UCLASS()
-class SNAKE_API ABarrier : public AActor, public IInteractable
-{
+class SNAKE_API ABarrier : public AActor, public IInteractable {
 	GENERATED_BODY()
 
-public:	
+public:
 	// Sets default values for this actor's properties
 	ABarrier();
 
@@ -20,9 +20,12 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void Interact(AActor* Interactor, bool bIsHead) override;
+
+	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly)
+		UStaticMeshComponent* MeshComponent;
 };
